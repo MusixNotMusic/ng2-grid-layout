@@ -121,6 +121,41 @@
           }
         }
       }
+    },
+    "grid-layout": {
+      "root": "projects/grid-layout",
+      "sourceRoot": "projects/grid-layout/src",
+      "projectType": "library",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/grid-layout/tsconfig.lib.json",
+            "project": "projects/grid-layout/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/grid-layout/src/test.ts",
+            "tsConfig": "projects/grid-layout/tsconfig.spec.json",
+            "karmaConfig": "projects/grid-layout/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/grid-layout/tsconfig.lib.json",
+              "projects/grid-layout/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "ng2-grid-layout"

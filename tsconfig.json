@@ -16,6 +16,14 @@
     "lib": [
       "es2017",
       "dom"
-    ]
+    ],
+    "paths": {
+      "grid-layout": [
+        "dist/grid-layout"
+      ],
+      "grid-layout/*": [
+        "dist/grid-layout/*"
+      ]
+    }
   }
 }
