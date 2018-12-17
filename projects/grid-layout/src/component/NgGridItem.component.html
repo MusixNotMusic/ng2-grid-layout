@@ -1,0 +1,6 @@
+<div class="ng-grid-item"
+         [ngClass]="{ 'resizing' : isResizing, 'ng-draggable-dragging' : isDragging, 'cssTransforms' : useCssTransforms, 'render-rtl' : renderRtl, 'disable-userselect': isDragging, 'no-touch': isAndroid , 'ng-grid-placeholder': i < 0 ? true : false}"
+         [ngStyle]="style">
+        <ng-content></ng-content>
+        <span *ngIf="isResizable" [ngClass]="resizableHandleClass"></span>
+</div>

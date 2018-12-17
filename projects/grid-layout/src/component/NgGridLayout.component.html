@@ -1,0 +1,25 @@
+<div class="layoutJSON">
+   <div class="columns">
+         <div class="layoutItem" *ngFor="let item of layout">
+            <b>{{item.i}}</b>: [{{item.x}}, {{item.y}}, {{item.w}}, {{item.h}}]
+         </div>
+   </div>
+</div>
+<div class="vue-grid-layout" [ngStyle]="mergedStyle" style="background-color: #eee">
+   <ng-content></ng-content>
+   <app-grid-item  
+      class="vue-grid-placeholder"
+      [ngStyle]="{display: isDragging ? 'block' : 'none'}"
+      [cols]="colNum"
+      [rowHeight]="rowHeight"
+      [isDraggable]="isDraggable"
+      [isResizable]="isResizable"
+      [margin]="margin"
+      [useCssTransforms]="useCssTransforms"
+      [i]="-1"
+      [x]='placeholder.x'
+      [y]='placeholder.y'
+      [w]='placeholder.w'
+      [h]='placeholder.h'
+   ></app-grid-item>
+</div>

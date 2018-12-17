@@ -23,7 +23,7 @@
       ],
       "grid-layout/*": [
         "dist/grid-layout/*"
-      ]
+      ],
     }
   }
 }
