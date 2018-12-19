@@ -10,7 +10,7 @@ ng serve #启动项目
 ```bash
     ng build grid-layout #构建lib
 ```
-##layout
+## layout
 ```bash
 (layout)
 +---------------------------------------------------------------------------------------------------+ -
@@ -26,7 +26,7 @@ ng serve #启动项目
 |<------------------------------------browser width------------------------------------------------>|
 ```
 
-###NgGridLayout.Component
+### NgGridLayout.Component
 
 |参数|类型|默认值| 含义|
 | ------ | ------ | ------ |------ |
@@ -36,14 +36,14 @@ ng serve #启动项目
 |margin|Array &lt;number\>| [10,10]|栅格之间距离|
 |isDraggable| boolean | true| 可拖拽|
 |isResizable| boolean | true| 可伸缩|
-|useCssTransforms| boolean | true| 使用css3动画 transform|
+|useCssTransforms| boolean | true| 使用css3动画 transform|
 |verticalCompact| boolean | true | 对齐方式|
 |layout| Array &lt;object\> |   |具体布局数据|
 |responsive| boolean | true | 响应式|
 |breakpoints| object|{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }| 响应式设备宽度|
 |cols| object| { lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 } | 响应式 对应colNum值 |
 
-###NgGridItem.Component
+### NgGridItem.Component
 
 |参数|类型|默认值| 含义|
 | ------ | ------ | ------ |------ |
