@@ -36,7 +36,7 @@ ng serve #启动项目
 |margin|Array &lt;number\>| [10,10]|栅格之间距离|
 |isDraggable| boolean | true| 可拖拽|
 |isResizable| boolean | true| 可伸缩|
-|useCssTransforms|boolean| true| 使用css3动画 transform|
+|useCssTransforms| boolean | true | 使用css3动画 transform|
 |verticalCompact| boolean | true | 对齐方式|
 |layout| Array &lt;object\> |   |具体布局数据|
 |responsive| boolean | true | 响应式|
@@ -53,7 +53,7 @@ ng serve #启动项目
 |minH|number| 1|栅格最小高度|
 |minW| number | 1| 栅格最小宽度|
 |maxH| number | Infinity| 栅格最大高度|
-|maxW| number | Infinity| 栅格最大宽度 |
+|maxW| number | Infinity| 栅格最大宽度|
 |x|  number  |  | 栅格位于layout(布局)图中的x轴位置|
 |y|  number  |  | 栅格位于layout(布局)图中的y轴位置|
 |w| number  |  | 栅格 在 layout(布局)图中的 单位 宽度|
