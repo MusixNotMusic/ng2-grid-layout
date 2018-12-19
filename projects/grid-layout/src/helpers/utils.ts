@@ -577,3 +577,8 @@ export function findAndRemove(array, property, value) {
         }
     });
 }
+
+
+export function getMaxId(layout) {
+    return Math.max.apply(null, layout.map( obj => obj.i - 0 ));
+}

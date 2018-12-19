@@ -1,8 +1,8 @@
-.vue-grid-layout {
+.ng-grid-layout {
   position: relative;
   transition: height 200ms ease;
 }
-.vue-grid-placeholder {
+.ng-layout-placeholder {
   background: red;
   opacity: 0.2;
   transition-duration: 100ms;

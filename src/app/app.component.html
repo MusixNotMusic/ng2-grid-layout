@@ -1,5 +1,5 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
+<!-- <div style="text-align:center">
   <h1>
     Welcome to {{ title }}!
   </h1>
@@ -16,5 +16,41 @@
   <li>
     <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
   </li>
-</ul>
-
+</ul> -->
+<div id="content" style= "position: relative;">
+  <input type="checkbox" value="responsive" [checked]="responsive" name="1" (click)="checkResponse()">响应式
+  <input type="checkbox" value="draggable" [checked]="draggable" name="2" (click)="checkDraggable()">可拖拽
+  <input type="checkbox" value="resizable" [checked]="resizable" name="3" (click)="checkResizable()">可拉伸
+  <button (click)="addItem()">add layout</button>
+  <app-grid-layout 
+    [layout]="data"
+    [colNum]="12"
+    [rowHeight]="40"
+    [isDraggable]="draggable"
+    [isResizable]="resizable"
+    [useCssTransforms]= "useCssTransforms"
+    [verticalCompact]="verticalCompact" 
+    [responsive]="responsive"
+  >
+    <app-grid-item  *ngFor= "let item of data"
+        [x]="item.x"
+        [y]="item.y" 
+        [w]="item.w"
+        [h]="item.h"
+        [i]="item.i"
+        [static]="!!item.static"
+        [cols]="colNum"
+        [rowHeight]="rowHeight"
+        [isDraggable]="!item.static && draggable"
+        [isResizable]="!item.static && resizable"
+        [useCssTransforms]="useCssTransforms"
+        [componentData]="item.componentData"
+        > 
+          <!-- <span>{{item.i}}</span> -->
+          <!-- <ng-template> -->
+            <!-- <app-content-test [componentName]="ContentComponent"></app-content-test> -->
+          <!-- </ng-template> -->
+          <!-- <app-content-test></app-content-test> -->
+    </app-grid-item> 
+  </app-grid-layout>
+</div>

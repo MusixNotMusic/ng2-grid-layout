@@ -1,0 +1,12 @@
+.content-wrap {
+  height: 400px;
+  width: 300px;
+  border: 1px solid steelblue;
+  box-sizing: border-box;
+}
+.area {
+  margin: auto;
+  width: 50%;
+  height: 50%;
+  background: goldenrod
+}

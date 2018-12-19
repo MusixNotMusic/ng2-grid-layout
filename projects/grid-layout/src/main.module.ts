@@ -4,11 +4,12 @@ import { CommonModule } from '@angular/common';
 import { NgGridItemComponent } from './component/NgGridItem.component';
 import { NgGridLayoutComponent } from './component/NgGridLayout.component';
 import { EventService } from './service/event.service';
+import { FlagDirective } from './directives/flag.directive';
 
 @NgModule({
-  declarations: [ NgGridItemComponent, NgGridLayoutComponent],
+  declarations: [ NgGridItemComponent, NgGridLayoutComponent, FlagDirective],
   // entryComponents:  [ NgGridPlaceholder ],
-  imports:[
+  imports: [
     CommonModule,
     FormsModule
   ],

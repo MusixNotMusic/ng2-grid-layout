@@ -1,10 +1,12 @@
 import { OnInit, SimpleChanges, OnChanges, Component, AfterViewInit, ElementRef, Input} from '@angular/core';
-import {bottom, compact, getLayoutItem, moveElement, validateLayout, cloneLayout} from '../helpers/utils';
+import {bottom, compact, getLayoutItem, moveElement, validateLayout, cloneLayout, getMaxId} from '../helpers/utils';
 import {addWindowEventListener, removeWindowEventListener} from '../helpers/domUtils';
 import {getBreakpointFromWidth, getColsFromBreakpoint, findOrGenerateResponsiveLayout } from '../helpers/responsiveUtils';
 import * as elementResizeDetectorMaker_ from 'element-resize-detector';
 import { EventService } from '../service/event.service';
+import * as _lodash from 'lodash';
 const elementResizeDetectorMaker = elementResizeDetectorMaker_;
+const _ = _lodash;
 @Component({
   selector: 'app-grid-layout',
   templateUrl: 'NgGridLayout.component.html',
@@ -14,7 +16,7 @@ const elementResizeDetectorMaker = elementResizeDetectorMaker_;
 export class NgGridLayoutComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() public autoSize = true;
   @Input() public colNum = 12;
-  @Input() public rowHeight = 10;
+  @Input() public rowHeight = 30;
   @Input() public maxRows = Infinity;
   @Input() public margin = [10, 10];
   @Input() public isDraggable = true;
@@ -23,7 +25,7 @@ export class NgGridLayoutComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() public useCssTransforms = true;
   @Input() public verticalCompact = true;
   @Input() public layout: Array<any>;
-  @Input() responsive = false;
+  @Input() responsive = true;
   @Input() breakpoints = { lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 };
   @Input() cols = { lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 };
   // @Output() addGrid: EventEmitter<any> = new EventEmitter();
@@ -35,11 +37,16 @@ export class NgGridLayoutComponent implements OnInit, AfterViewInit, OnChanges {
   public layouts = {};
   public lastBreakpoint = null;
   public originalLayout = null;
+  public maxId = 0; // (会删除 添加 grid) 记录最大ID
   constructor(private _ngEl: ElementRef, private eventService: EventService) {}
 
   ngOnInit() {
     this.eventService._event.on('resizeEvent', this.resizeEventHandler, this);
     this.eventService._event.on('dragEvent', this.onDragEventHandler, this);
+    this.eventService._event.on('removeGrid', this.removeGridHandler, this);
+    this.eventService._event.on('copyGrid', this.copyGridHandler, this);
+    this.eventService._event.on('addGrid', this.addGridHandler, this);
+    this.maxId = getMaxId(this.layout);
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -92,6 +99,54 @@ export class NgGridLayoutComponent implements OnInit, AfterViewInit, OnChanges {
 
   public onDragEventHandler(eventName, id, x, y, w, h) {
     this.dragEvent(eventName, id, x, y, w, h);
+  }
+
+  public removeGridHandler(id) {
+    let gIndex = this.layout.findIndex((obj) => {
+      return obj.i == id ;
+    });
+    let _grid = this.layout.splice(gIndex, 1);
+    this.maxId = getMaxId(this.layout);
+    console.log('[oId = %s] [gIndex = %s]', id, gIndex, _grid, this.maxId);
+    this.onWindowResize();
+  }
+
+  // 复制 Grid 栅格
+  public copyGridHandler(id) {
+    let gIndex = this.layout.findIndex((obj) => {
+      return obj.i == id ;
+    });
+    let _grid = this.layout[gIndex];
+    let newGrid = _.cloneDeep(_grid);
+    console.log('newGrid ===> ', newGrid);
+    newGrid.i = ++this.maxId;
+    // Horizontal
+    if ( newGrid.x + newGrid.w * 2 <= this.eventService._cols ) {
+      newGrid.x = newGrid.x + newGrid.w;
+    } else { // Vertical
+      newGrid.y = newGrid.y + newGrid.h;
+    }
+    this.layout.push(newGrid);
+    this.onWindowResize();
+  }
+
+  public addGridHandler(id) {
+    let gIndex = this.layout.findIndex((obj) => {
+      return obj.i == id ;
+    });
+    let _grid = this.layout[gIndex];
+    let newGrid = _.cloneDeep(_grid);
+    console.log('newGrid ===> ', newGrid);
+    newGrid.i = ++this.maxId;
+    // Horizontal
+    if ( newGrid.x + newGrid.w * 2 <= this.eventService._cols ) {
+      newGrid.x = newGrid.x + newGrid.w;
+    } else { // Vertical
+      newGrid.y = newGrid.y + newGrid.h;
+    }
+    delete newGrid.static;
+    this.layout.push(newGrid);
+    this.onWindowResize();
   }
 
   // 滚动条 和 resize 需要重写
@@ -156,9 +211,9 @@ export class NgGridLayoutComponent implements OnInit, AfterViewInit, OnChanges {
       this.eventService._event.emit('updateWidth', this.width);
       this.eventService._event.emit('compact');
     } else {
+      this.updateHeight();
       this.eventService._event.emit('updateWidth', this.width);
       this.eventService._event.emit('compact');
-      this.updateHeight();
       compact(this.layout, this.verticalCompact);
     }
   }
@@ -241,8 +296,9 @@ export class NgGridLayoutComponent implements OnInit, AfterViewInit, OnChanges {
     // this.eventService._event.emit('setColNum', newCols);
     console.log(newBreakpoint, newCols, this.layouts, this.lastBreakpoint);
     // save actual layout in layouts
-    if (this.lastBreakpoint != null && !this.layouts[this.lastBreakpoint]) {
-        this.layouts[this.lastBreakpoint] = cloneLayout(this.layout);
+    // if (this.lastBreakpoint != null && !this.layouts[this.lastBreakpoint]) {
+    if (this.lastBreakpoint != null) {
+        this.layouts[this.lastBreakpoint] = _.cloneDeep(this.layout);
     }
     // Find or generate a new layout.
     const layout = findOrGenerateResponsiveLayout(

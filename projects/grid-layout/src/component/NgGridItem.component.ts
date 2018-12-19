@@ -1,10 +1,11 @@
 // tslint:disable-next-line:max-line-length
-import { OnInit, OnDestroy, Component, SimpleChanges, OnChanges, ElementRef, Input, AfterViewInit} from '@angular/core';
+import { OnInit, ComponentFactoryResolver, ViewChild, Component, SimpleChanges, OnChanges, ElementRef, Input, AfterViewInit} from '@angular/core';
 import { getDocumentDir } from '../helpers/domUtils';
 import { setTopLeft, setTopRight, setTransformRtl, setTransform } from '../helpers/utils';
 import { getControlPosition, createCoreData } from '../helpers/draggableUtils';
-import * as interact_  from 'interactjs';
+import * as interact_ from 'interactjs';
 import { EventService } from '../service/event.service';
+import { FlagDirective } from '../directives/flag.directive';
 const interact = interact_;
 @Component({
   selector: 'app-grid-item',
@@ -12,7 +13,8 @@ const interact = interact_;
   styleUrls: ['NgGridItem.component.css'],
 })
 export class NgGridItemComponent implements OnInit, AfterViewInit, OnChanges {
-
+  @ViewChild(FlagDirective) flag: FlagDirective;
+  @Input() componentData;
   @Input() isDraggable = null;
   @Input() isResizable = null;
   @Input() minH = 1;
@@ -33,6 +35,7 @@ export class NgGridItemComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() margin = [10, 10];
   @Input() maxRows = Infinity;
   @Input() useCssTransforms = false;
+  @Input() static;
   private width;
   private initWidth = true;
   public isDragging = false;
@@ -65,7 +68,7 @@ export class NgGridItemComponent implements OnInit, AfterViewInit, OnChanges {
   public resizableHandleClass = this.renderRtl ? 'vue-resizable-handle vue-rtl-resizable-handle' : 'vue-resizable-handle';
   // #end@computed
 
-  constructor(private _ngEl: ElementRef, private eventService: EventService) {
+  constructor(private _ngEl: ElementRef, private eventService: EventService, private componentFactoryResolver: ComponentFactoryResolver) {
 }
 
 
@@ -77,6 +80,25 @@ export class NgGridItemComponent implements OnInit, AfterViewInit, OnChanges {
     this.eventService._event.on('setRowHeight', this.updateWidth, this);
     this.eventService._event.on('directionchange', this.directionchangeHandler, this);
     this.eventService._event.on('setColNum', this.setColNum, this);
+    console.log('P Init _ngEl', this._ngEl);
+    this.loadComponent();
+  }
+  /**
+   *  动态组件加载
+   */
+  loadComponent() {
+    console.log('loadComponent', this.componentData);
+    if (!this.componentData) { return; }
+    let componentFactory = this.componentFactoryResolver.resolveComponentFactory(this.componentData.component);
+    let viewContainerRef = this.flag.viewContainerRef;
+    viewContainerRef.clear();
+    let componentRef = viewContainerRef.createComponent(componentFactory);
+    (<any>componentRef.instance).data = this.componentData.data;
+    console.log('this.flag.viewContainerRef', this.flag.viewContainerRef);
+    // if (this.componentData.auto) {
+    //   setTimeout(this.autoSize.bind(this));
+    // } else {
+    // }
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -145,9 +167,7 @@ export class NgGridItemComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   public ngAfterViewInit() {
-    // console.log('NgGridItem ngAfterViewInit');
-    // console.log('ngAfterViewInit', this.vc, '123123');
-    // this.createStyle();
+    console.log('P ngAfterViewInit');
   }
 
   public updateWidthHandler(width): void {
@@ -157,7 +177,9 @@ export class NgGridItemComponent implements OnInit, AfterViewInit, OnChanges {
   public compactHandler(layout): void {
     this.compact(layout);
   }
-
+  /*
+   * eventEmit 回调
+   * */
   public setDraggableHandler(isDraggable) {
     if (this.isDraggable === null) {
       this.isDraggable = isDraggable;
@@ -234,7 +256,9 @@ export class NgGridItemComponent implements OnInit, AfterViewInit, OnChanges {
     }
     this.style = style;
   }
-
+  /**
+   * Resize Event 伸缩事件
+   */
   public handleResize(event) {
     const position = getControlPosition(event);
     if (position === null) {
@@ -307,6 +331,9 @@ export class NgGridItemComponent implements OnInit, AfterViewInit, OnChanges {
     this.eventService._event.emit('resizeEvent', event.type, this.i, this.innerX, this.innerY, pos.w, pos.h);
   }
 
+  /**
+   * Drag Event 拖拽事件
+   */
   public handleDrag(event) {
     if (this.isResizing) {
       return;
@@ -499,43 +526,59 @@ export class NgGridItemComponent implements OnInit, AfterViewInit, OnChanges {
       });
     }
   }
-  // public autoSize() {
+  public autoSize() {
     // ok here we want to calculate if a resize is needed
-    // this.previousW = this.innerW;
-    // this.previousH = this.innerH;
+    if (this.i === -1) { return; }
+    this.previousW = this.innerW;
+    this.previousH = this.innerH;
+    const childElement = this._ngEl.nativeElement.firstElementChild.firstElementChild.firstElementChild;
+    console.log('autoSize', this._ngEl, childElement);
+    // console.dir( childElement);
+    const newSize = childElement.getBoundingClientRect();
+    console.log('autoSize ===>', childElement, newSize);
+    const pos = this.calcWH(newSize.height, newSize.width);
+    if (pos.w < this.minW) {
+        pos.w = this.minW;
+    }
+    if (pos.w > this.maxW) {
+        pos.w = this.maxW;
+    }
+    if (pos.h < this.minH) {
+        pos.h = this.minH;
+    }
+    if (pos.h > this.maxH) {
+        pos.h = this.maxH;
+    }
 
-    // let newSize=this.$slots.default[0].elm.getBoundingClientRect();
-    // let pos = this.calcWH(newSize.height, newSize.width);
-    // if (pos.w < this.minW) {
-    //     pos.w = this.minW;
-    // }
-    // if (pos.w > this.maxW) {
-    //     pos.w = this.maxW;
-    // }
-    // if (pos.h < this.minH) {
-    //     pos.h = this.minH;
-    // }
-    // if (pos.h > this.maxH) {
-    //     pos.h = this.maxH;
-    // }
-
-    // if (pos.h < 1) {
-    //     pos.h = 1;
-    // }
-    // if (pos.w < 1) {
-    //     pos.w = 1;
-    // }
-
-    // // this.lastW = x; // basicly, this is copied from resizehandler, but shouldn't be needed
-    // // this.lastH = y;
+    if (pos.h < 1) {
+        pos.h = 1;
+    }
+    if (pos.w < 1) {
+        pos.w = 1;
+    }
+    console.log('pos -->', pos);
+    // this.lastW = x; // basicly, this is copied from resizehandler, but shouldn't be needed
+    // this.lastH = y;
 
     // if (this.innerW !== pos.w || this.innerH !== pos.h) {
     //     this.$emit("resize", this.i, pos.h, pos.w, newSize.height, newSize.width);
     // }
-    // if (this.previousW !== pos.w || this.previousH !== pos.h) {
-    //     this.$emit("resized", this.i, pos.h, pos.w, newSize.height, newSize.width);
-    //     this.eventBus.$emit("resizeEvent", "resizeend", this.i, this.innerX, this.innerY, pos.h, pos.w);
-    // }
-  // }
+    if (this.previousW !== pos.w || this.previousH !== pos.h) {
+        // this.$emit("resized", this.i, pos.h, pos.w, newSize.height, newSize.width);
+        console.log('run resizeEvent');
+        this.eventService._event.emit('resizeEvent', '', this.i, this.innerX, this.innerY, pos.w, pos.h);
+    }
+  }
 
+  public delGrid() {
+    this.eventService._event.emit('removeGrid', this.i);
+  }
+
+  public copyGrid() {
+    this.eventService._event.emit('copyGrid', this.i);
+  }
+
+  public addGrid() {
+    this.eventService._event.emit('addGrid', this.i);
+  }
 }

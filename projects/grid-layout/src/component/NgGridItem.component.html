@@ -1,6 +1,32 @@
-<div class="ng-grid-item"
-         [ngClass]="{ 'resizing' : isResizing, 'ng-draggable-dragging' : isDragging, 'cssTransforms' : useCssTransforms, 'render-rtl' : renderRtl, 'disable-userselect': isDragging, 'no-touch': isAndroid , 'ng-grid-placeholder': i < 0 ? true : false}"
+<div [ngClass]="{ 
+                 'ng-grid-item': true,
+                 'resizing' : isResizing, 
+                 'ng-draggable-dragging' : isDragging, 
+                 'cssTransforms' : useCssTransforms, 
+                 'render-rtl' : renderRtl, 
+                 'disable-userselect': isDragging, 
+                 'no-touch': isAndroid , 
+                 'ng-grid-placeholder': i < 0 ? true : false
+                }"
          [ngStyle]="style">
-        <ng-content></ng-content>
+        <div *ngIf="!static; else elseBlock" class="grid-drag-handle">
+                <button (click)="delGrid($event)">Del</button>
+                <button (click)="copyGrid($event)">Copy</button>
+                {{i}}
+        </div>
+
+        <ng-template #elseBlock>
+                <div class="grid-static" (click)="addGrid($event)">
+
+                </div>
+        </ng-template>
+        <!-- <div *ngIf="static" class="grid-drag-handle">
+                <button (click)="delGrid($event)">Del</button>
+                <button (click)="copyGrid($event)">Copy</button>
+                {{i}}
+        </div> -->
+
+        <!-- <div class="outer"><ng-template flag></ng-template></div> -->
+        <ng-template flag></ng-template>
         <span *ngIf="isResizable" [ngClass]="resizableHandleClass"></span>
 </div>

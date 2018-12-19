@@ -1,0 +1,46 @@
+.bash{
+  width: 100%;
+  height: calc(100% - 25px);
+  border-radius: 5px;
+}
+.skew-line{
+  background: linear-gradient(to left top, transparent 20%, cadetblue, transparent 90%);
+}
+/* .skew-line{
+  position:relative;
+  margin:50px auto;
+  width:100px;
+  height:100px;
+  box-sizing:border-box;
+  border:1px solid #333;  
+  line-height:120px;
+  text-indent:5px;
+}
+
+.skew-line::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  width:100%;
+  height:50px;
+  box-sizing:border-box;
+  border-bottom:1px solid deeppink;
+  transform-origin:bottom center;
+  animation:slash 5s infinite ease;
+}
+
+@keyframes slash{
+  0%{
+    transform:rotateZ(0deg) scale(1);
+  }
+  30%{
+    transform:rotateZ(45deg) scale(1);
+  }
+  60%{
+    transform:rotateZ(45deg) scale(1.414);
+  }
+  100%{
+    transform:rotateZ(45deg) scale(1.414);
+  }
+} */

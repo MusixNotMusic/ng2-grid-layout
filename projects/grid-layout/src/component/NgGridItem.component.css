@@ -7,7 +7,9 @@
 .ng-grid-item {
   transition: all 200ms ease;
   transition-property: left, top, right;
-  border: 1px solid black;
+  border: 2px dashed orange;
+  border-radius: 5px;
+  box-sizing: border-box;
   background: #ccc;
   z-index: 2;
   /* add right for rtl */
@@ -16,6 +18,11 @@
 .ng-grid-item.no-touch {
   -ms-touch-action: none;
   touch-action: none;
+}
+
+.outer{
+  position: absolute;
+  border: solid 1px;
 }
 
 .ng-grid-item.cssTransforms {
@@ -49,6 +56,7 @@
   -ms-user-select: none;
   -o-user-select: none;
   user-select: none;
+  border: none;
 }
 
 .ng-grid-item > .ng-resizable-handle {
@@ -95,4 +103,38 @@
   background-origin: content-box;
   box-sizing: border-box;
   cursor: se-resize;
+}
+
+.grid-drag-handle{
+  width: 100%;
+  height: 25px;
+  background: steelblue;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+}
+
+.grid-static {
+  /* background: repeating-linear-gradient(red,blue); */
+  /* background: -webkit-linear-gradient(left, #eee , rgb(171, 149, 109)); 
+  background: -o-linear-gradient(right, #eee, orange); 
+  background: -moz-linear-gradient(right, #eee, orange); 
+  background: linear-gradient(to right, #eee , rgb(171, 149, 109));  */
+  background: #eee;
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.grid-static::before {
+  content: "+";
+  position: absolute;
+  top:50%;
+  left:50%;
+  width:100%;
+  transform:translate(-50%,-50%);
+  text-align: center;
+  color:#ccc;
+  font-size: 6rem;
+  font-family: 'Courier New', Courier, monospace;
 }
