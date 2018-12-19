@@ -10,7 +10,7 @@ ng serve #启动项目
 ```bash
     ng build grid-layout #构建lib
 ```
-##layout
+## layout
 ```bash
 (layout)
 +---------------------------------------------------------------------------------------------------+ -
@@ -26,7 +26,8 @@ ng serve #启动项目
 |<------------------------------------browser width------------------------------------------------>|
 ```
 
-###NgGridLayout.Component
+### NgGridLayout.Component
+
 |参数|类型|默认值| 含义|
 | ------ | ------ | ------ |------ |
 |colNum| number | 12 |允许每列最多排序个数|
@@ -42,7 +43,8 @@ ng serve #启动项目
 |breakpoints| object|{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }| 响应式设备宽度|
 |cols| object| { lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 } | 响应式 对应colNum值 |
 
-###NgGridItem.Component
+### NgGridItem.Component
+
 |参数|类型|默认值| 含义|
 | ------ | ------ | ------ |------ |
 |componentData| object |  |动态组件数据{component: xxx, data:xxx}|
