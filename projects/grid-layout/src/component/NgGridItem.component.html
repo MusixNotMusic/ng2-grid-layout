@@ -10,13 +10,13 @@
                 }"
          [ngStyle]="style">
         <div *ngIf="!static; else elseBlock" class="grid-drag-handle">
-                <button (click)="delGrid($event)">Del</button>
-                <button (click)="copyGrid($event)">Copy</button>
+                <button (click)="delGrid()">Del</button>
+                <button (click)="copyGrid()">Copy</button>
                 {{i}}
         </div>
 
         <ng-template #elseBlock>
-                <div class="grid-static" (click)="addGrid($event)">
+                <div class="grid-static" (click)="addGrid()">
 
                 </div>
         </ng-template>

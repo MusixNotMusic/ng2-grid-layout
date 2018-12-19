@@ -9,4 +9,5 @@
 export * from './component/NgGridItem.component';
 export * from './component/NgGridLayout.component';
 export * from './service/event.service';
+export * from './directives/flag.directive';
 export * from './main.module';

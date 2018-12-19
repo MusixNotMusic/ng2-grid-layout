@@ -14,6 +14,6 @@ import { FlagDirective } from './directives/flag.directive';
     FormsModule
   ],
   providers: [EventService],
-  exports: [ NgGridItemComponent, NgGridLayoutComponent]
+  exports: [ NgGridItemComponent, NgGridLayoutComponent, FlagDirective]
 })
 export class Ng2GridLayoutModule {}
